@@ -1,0 +1,32 @@
+{
+  "welcome": "WELCOME TO HEALTH AWARENESS",
+  "getStarted": "Get Started",
+  "chooseLanguage": "Choose Your Language",
+  "dashboard": "Health Dashboard",
+  "symptomChecker": "Symptom Checker",
+  "dietManagement": "Diet & Weight Management",
+  "fitness": "Fitness & Exercises",
+  "mentalHealth": "Mental Health",
+  "checkSymptoms": "Check Your Symptoms",
+  "manageDiet": "Manage Your Diet",
+  "stayFit": "Stay Fit & Active",
+  "mentalWellness": "Mental Wellness",
+  "searchSymptoms": "Search symptoms...",
+  "otherSymptoms": "Other symptoms",
+  "startAnalysis": "Start Analysis",
+  "chatWithAI": "Chat with AI Assistant",
+  "languages": {
+    "en": "English",
+    "hi": "हिंदी (Hindi)",
+    "te": "తెలుగు (Telugu)",
+    "ta": "தமிழ் (Tamil)",
+    "kn": "ಕನ್ನಡ (Kannada)",
+    "bn": "বাংলা (Bengali)",
+    "mr": "मराठी (Marathi)",
+    "gu": "ગુજરાતી (Gujarati)",
+    "pa": "ਪੰਜਾਬੀ (Punjabi)",
+    "ml": "മലയാളം (Malayalam)",
+    "or": "ଓଡ଼ିଆ (Oriya)",
+    "as": "অসমীয়া (Assamese)"
+  }
+}

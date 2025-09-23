@@ -1,0 +1,18 @@
+{
+  "welcome": "स्वास्थ्य जागरूकता में आपका स्वागत है",
+  "getStarted": "शुरू करें",
+  "chooseLanguage": "अपनी भाषा चुनें",
+  "dashboard": "स्वास्थ्य डैशबोर्ड",
+  "symptomChecker": "लक्षण जांचकर्ता",
+  "dietManagement": "आहार और वजन प्रबंधन",
+  "fitness": "फिटनेस और व्यायाम",
+  "mentalHealth": "मानसिक स्वास्थ्य",
+  "checkSymptoms": "अपने लक्षणों की जांच करें",
+  "manageDiet": "अपने आहार का प्रबंधन करें",
+  "stayFit": "फिट और सक्रिय रहें",
+  "mentalWellness": "मानसिक कल्याण",
+  "searchSymptoms": "लक्षण खोजें...",
+  "otherSymptoms": "अन्य लक्षण",
+  "startAnalysis": "विश्लेषण शुरू करें",
+  "chatWithAI": "AI सहायक से चैट करें"
+}

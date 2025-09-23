@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Stethoscope, Apple, Dumbbell, Brain, MessageCircle } from "lucide-react";
-import symptomCheckerImg from "@/assets/symptom-checker.jpg";
-import dietNutritionImg from "@/assets/diet-nutrition.jpg";
-import fitnessImg from "@/assets/fitness.jpg";
-import mentalHealthImg from "@/assets/mental-health.jpg";
+import symptomRedBg from "@/assets/symptom-red-bg.jpg";
+import dietColorfulBg from "@/assets/diet-colorful-bg.jpg";
+import fitnessOrangeBg from "@/assets/fitness-orange-bg.jpg";
+import mentalPeacefulBg from "@/assets/mental-peaceful-bg.jpg";
 
 const Dashboard = () => {
   const { t } = useTranslation();
@@ -18,36 +18,36 @@ const Dashboard = () => {
       title: t('symptomChecker'),
       description: t('checkSymptoms'),
       icon: Stethoscope,
-      image: symptomCheckerImg,
+      image: symptomRedBg,
       path: '/symptom-checker',
-      gradient: 'from-primary to-primary-glow',
+      gradient: 'from-red-600 to-red-800',
     },
     {
       id: 'diet-management',
       title: t('dietManagement'),
       description: t('manageDiet'),
       icon: Apple,
-      image: dietNutritionImg,
+      image: dietColorfulBg,
       path: '/diet-management',
-      gradient: 'from-success to-accent',
+      gradient: 'from-green-500 to-orange-600',
     },
     {
       id: 'fitness',
       title: t('fitness'),
       description: t('stayFit'),
       icon: Dumbbell,
-      image: fitnessImg,
+      image: fitnessOrangeBg,
       path: '/fitness',
-      gradient: 'from-accent to-primary',
+      gradient: 'from-orange-500 to-amber-600',
     },
     {
       id: 'mental-health',
       title: t('mentalHealth'),
       description: t('mentalWellness'),
       icon: Brain,
-      image: mentalHealthImg,
+      image: mentalPeacefulBg,
       path: '/mental-health',
-      gradient: 'from-primary to-accent',
+      gradient: 'from-green-600 to-blue-700',
     },
   ];
 

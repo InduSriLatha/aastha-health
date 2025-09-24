@@ -219,38 +219,59 @@ const SymptomChecker = () => {
                   <CardTitle className="text-2xl text-white">Analysis Results</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6 text-white">
-                  <div className="bg-white/20 p-4 rounded-lg">
-                    <div className="flex items-center justify-between mb-2">
-                      <h3 className="text-xl font-bold">{results.name}</h3>
-                      <Badge 
-                        variant="secondary" 
-                        className={`${
-                          results.severity === 'severe' ? 'bg-red-500/20 text-red-100' :
-                          results.severity === 'moderate' ? 'bg-yellow-500/20 text-yellow-100' :
-                          'bg-green-500/20 text-green-100'
-                        }`}
-                      >
-                        {results.severity}
-                      </Badge>
+                  <div className="bg-white/20 p-6 rounded-xl border border-white/30">
+                    <div className="text-center mb-4">
+                      <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-3">
+                        <Stethoscope className="h-8 w-8 text-white" />
+                      </div>
+                      <h3 className="text-3xl font-bold text-white mb-2">🔍 PREDICTED DISEASE</h3>
+                      <div className="text-4xl font-extrabold text-yellow-300 mb-2">
+                        {results.name}
+                      </div>
+                      <div className="flex items-center justify-center gap-2 mb-3">
+                        <Badge 
+                          variant="secondary" 
+                          className={`text-lg px-3 py-1 ${
+                            results.severity === 'severe' ? 'bg-red-500/30 text-red-100 border-red-300/50' :
+                            results.severity === 'moderate' ? 'bg-yellow-500/30 text-yellow-100 border-yellow-300/50' :
+                            'bg-green-500/30 text-green-100 border-green-300/50'
+                          }`}
+                        >
+                          {results.severity.toUpperCase()}
+                        </Badge>
+                        <Badge variant="outline" className="text-lg px-3 py-1 bg-blue-500/20 text-blue-100 border-blue-300/50">
+                          {results.category}
+                        </Badge>
+                      </div>
                     </div>
-                    <div className="flex items-center mb-3">
-                      <span className="text-sm">Match Probability: </span>
-                      <div className="ml-2 flex-1 bg-white/20 rounded-full h-3">
+                    
+                    <div className="bg-white/10 p-4 rounded-lg mb-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-lg font-semibold">PREDICTION CONFIDENCE</span>
+                        <span className="text-2xl font-bold text-yellow-300">{results.probability}%</span>
+                      </div>
+                      <div className="bg-white/20 rounded-full h-4 overflow-hidden">
                         <div 
-                          className={`h-3 rounded-full transition-all duration-1000 ${
-                            results.probability >= 70 ? 'bg-green-400' :
-                            results.probability >= 50 ? 'bg-yellow-400' : 'bg-red-400'
+                          className={`h-4 rounded-full transition-all duration-2000 ${
+                            results.probability >= 70 ? 'bg-gradient-to-r from-green-400 to-green-500' :
+                            results.probability >= 50 ? 'bg-gradient-to-r from-yellow-400 to-orange-400' : 
+                            'bg-gradient-to-r from-red-400 to-red-500'
                           }`}
                           style={{ width: `${results.probability}%` }}
                         />
                       </div>
-                      <span className="ml-2 font-bold">{results.probability}%</span>
+                      <div className="text-center mt-2">
+                        <span className={`text-sm font-medium ${
+                          results.probability >= 70 ? 'text-green-200' :
+                          results.probability >= 50 ? 'text-yellow-200' : 'text-red-200'
+                        }`}>
+                          {results.probability >= 70 ? 'HIGH CONFIDENCE MATCH' :
+                           results.probability >= 50 ? 'MODERATE CONFIDENCE' : 'LOW CONFIDENCE - CONSULT DOCTOR'}
+                        </span>
+                      </div>
                     </div>
-                    <p className="text-sm opacity-90 mb-3">{results.description}</p>
-                    <div className="flex items-center text-sm text-blue-200">
-                      <Stethoscope className="h-4 w-4 mr-1" />
-                      Category: {results.category}
-                    </div>
+                    
+                    <p className="text-sm opacity-90 mb-3 text-center italic">{results.description}</p>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -117,6 +117,58 @@ export const diseaseDatabase: Disease[] = [
     foodsToAvoid: ['Alcohol', 'Caffeine', 'Sugary drinks', 'High-sodium foods'],
     severity: 'mild',
     category: 'General'
+  },
+  {
+    name: 'COVID-19',
+    symptoms: ['fever', 'cough', 'fatigue', 'shortness of breath', 'headache', 'sore throat', 'muscle aches'],
+    probability: 0,
+    doctorType: 'General Physician',
+    description: 'A viral respiratory illness caused by SARS-CoV-2',
+    causes: ['SARS-CoV-2 virus', 'Airborne transmission', 'Close contact with infected person'],
+    prevention: ['Vaccination', 'Mask wearing', 'Social distancing', 'Hand hygiene'],
+    foodsToEat: ['Vitamin C rich foods', 'Zinc supplements', 'Warm liquids', 'Protein-rich foods'],
+    foodsToAvoid: ['Alcohol', 'Processed foods', 'Excessive sugar'],
+    severity: 'moderate',
+    category: 'Respiratory'
+  },
+  {
+    name: 'Diabetes Type 2',
+    symptoms: ['fatigue', 'dizziness', 'headache', 'frequent urination', 'excessive thirst'],
+    probability: 0,
+    doctorType: 'Endocrinologist',
+    description: 'A chronic condition affecting blood sugar regulation',
+    causes: ['Insulin resistance', 'Obesity', 'Genetics', 'Sedentary lifestyle'],
+    prevention: ['Regular exercise', 'Healthy diet', 'Weight management', 'Regular monitoring'],
+    foodsToEat: ['Non-starchy vegetables', 'Whole grains', 'Lean proteins', 'Healthy fats'],
+    foodsToAvoid: ['Sugary foods', 'Refined carbs', 'Processed foods', 'Sugary drinks'],
+    severity: 'severe',
+    category: 'Endocrine'
+  },
+  {
+    name: 'Pneumonia',
+    symptoms: ['fever', 'cough', 'chest pain', 'shortness of breath', 'fatigue', 'chills'],
+    probability: 0,
+    doctorType: 'Pulmonologist',
+    description: 'An infection that inflames air sacs in lungs',
+    causes: ['Bacterial infection', 'Viral infection', 'Fungal infection', 'Weakened immune system'],
+    prevention: ['Vaccination', 'Good hygiene', 'Healthy lifestyle', 'Avoid smoking'],
+    foodsToEat: ['Warm broths', 'Citrus fruits', 'Ginger', 'Protein-rich foods'],
+    foodsToAvoid: ['Dairy products', 'Alcohol', 'Processed foods'],
+    severity: 'severe',
+    category: 'Respiratory'
+  },
+  {
+    name: 'Food Poisoning',
+    symptoms: ['nausea', 'vomiting', 'diarrhea', 'abdominal pain', 'fever'],
+    probability: 0,
+    doctorType: 'General Physician',
+    description: 'Illness caused by eating contaminated food',
+    causes: ['Bacterial contamination', 'Poor food handling', 'Expired food', 'Cross-contamination'],
+    prevention: ['Proper food storage', 'Cook food thoroughly', 'Wash hands', 'Check expiration dates'],
+    foodsToEat: ['Clear broths', 'BRAT diet', 'Electrolyte drinks', 'Ginger tea'],
+    foodsToAvoid: ['Dairy products', 'Fatty foods', 'Spicy foods', 'Alcohol'],
+    severity: 'moderate',
+    category: 'Gastrointestinal'
   }
 ];
 
@@ -126,40 +178,81 @@ export function analyzeSymptoms(selectedSymptoms: string[]): Disease | null {
   // Normalize symptoms to lowercase for matching
   const normalizedSymptoms = selectedSymptoms.map(s => s.toLowerCase().trim());
   
-  // Calculate probability for each disease
+  // Calculate probability for each disease with improved matching
   const results = diseaseDatabase.map(disease => {
-    const matchingSymptoms = disease.symptoms.filter(symptom => 
-      normalizedSymptoms.some(selected => 
-        selected.includes(symptom) || symptom.includes(selected)
-      )
-    );
+    let matchingSymptoms = 0;
+    let totalWeight = 0;
     
-    const probability = Math.round((matchingSymptoms.length / disease.symptoms.length) * 100);
+    disease.symptoms.forEach(symptom => {
+      const matchFound = normalizedSymptoms.some(selected => {
+        // Exact match (highest weight)
+        if (selected === symptom) return true;
+        // Partial match (medium weight)
+        if (selected.includes(symptom) || symptom.includes(selected)) return true;
+        // Similar symptoms mapping
+        const synonyms: { [key: string]: string[] } = {
+          'headache': ['head pain', 'migraine', 'head ache'],
+          'fever': ['high temperature', 'temperature', 'hot'],
+          'cough': ['coughing', 'hack'],
+          'fatigue': ['tired', 'weakness', 'exhaustion', 'tiredness'],
+          'nausea': ['sick', 'queasy', 'stomach upset'],
+          'dizziness': ['dizzy', 'lightheaded', 'vertigo'],
+          'chest pain': ['chest ache', 'heart pain'],
+          'shortness of breath': ['breathing difficulty', 'breathless', 'can\'t breathe'],
+          'sore throat': ['throat pain', 'throat ache'],
+          'muscle aches': ['muscle pain', 'body aches', 'joint pain'],
+          'abdominal pain': ['stomach pain', 'belly pain', 'tummy ache'],
+          'vomiting': ['throwing up', 'puking', 'sick']
+        };
+        
+        const symptomSynonyms = synonyms[symptom] || [];
+        return symptomSynonyms.some(synonym => selected.includes(synonym));
+      });
+      
+      if (matchFound) {
+        matchingSymptoms++;
+        totalWeight++;
+      }
+      totalWeight++;
+    });
+    
+    // Enhanced probability calculation
+    const baseProb = (matchingSymptoms / disease.symptoms.length) * 100;
+    // Bonus for having many symptoms match
+    const bonus = matchingSymptoms >= 3 ? 10 : 0;
+    const probability = Math.min(95, Math.round(baseProb + bonus));
     
     return {
       ...disease,
       probability,
-      matchingSymptoms: matchingSymptoms.length
+      matchingSymptoms
     };
   });
 
-  // Find the disease with highest probability and at least 2 matching symptoms
-  const bestMatch = results
-    .filter(result => result.matchingSymptoms >= 2)
-    .sort((a, b) => b.probability - a.probability)[0];
+  // Find the best matches (allow multiple if close)
+  const topMatches = results
+    .filter(result => result.matchingSymptoms >= 1)
+    .sort((a, b) => {
+      // Primary sort by probability
+      if (b.probability !== a.probability) return b.probability - a.probability;
+      // Secondary sort by number of matching symptoms
+      return b.matchingSymptoms - a.matchingSymptoms;
+    });
 
-  if (!bestMatch || bestMatch.probability < 30) {
-    // Return a generic result if no good match found
+  const bestMatch = topMatches[0];
+
+  if (!bestMatch || bestMatch.probability < 25) {
+    // Return a more specific generic result
     return {
-      name: 'Unspecified Condition',
+      name: `Unspecified Condition (${normalizedSymptoms.length} symptoms)`,
       symptoms: normalizedSymptoms,
-      probability: 50,
+      probability: 35,
       doctorType: 'General Physician',
-      description: 'Based on your symptoms, it\'s recommended to consult with a healthcare professional for proper evaluation.',
-      causes: ['Various factors could contribute to these symptoms'],
-      prevention: ['Maintain good hygiene', 'Eat a balanced diet', 'Get adequate rest', 'Stay hydrated'],
-      foodsToEat: ['Nutritious whole foods', 'Plenty of water', 'Fresh fruits and vegetables'],
-      foodsToAvoid: ['Processed foods', 'Excessive alcohol', 'Sugary drinks'],
+      description: `Based on your ${normalizedSymptoms.length} symptom(s): ${normalizedSymptoms.join(', ')}, a medical evaluation is recommended for proper diagnosis.`,
+      causes: ['Multiple factors could contribute to these symptoms', 'May require further medical investigation'],
+      prevention: ['Maintain good hygiene', 'Eat a balanced diet', 'Get adequate rest', 'Stay hydrated', 'Monitor symptoms'],
+      foodsToEat: ['Nutritious whole foods', 'Plenty of water', 'Fresh fruits and vegetables', 'Light, easily digestible meals'],
+      foodsToAvoid: ['Processed foods', 'Excessive alcohol', 'Sugary drinks', 'Heavy or spicy foods'],
       severity: 'mild' as const,
       category: 'General'
     };

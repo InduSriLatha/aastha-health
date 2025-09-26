@@ -40,7 +40,7 @@ const LanguageSelection = () => {
   const selectLanguage = (languageCode: string) => {
     i18n.changeLanguage(languageCode);
     localStorage.setItem('selectedLanguage', languageCode);
-    navigate('/dashboard');
+    navigate('/user-profile');
   };
 
   return (

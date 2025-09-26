@@ -30,7 +30,7 @@ const Welcome = () => {
         <Button 
           variant="hero"
           size="lg"
-          onClick={() => navigate('/language-selection')}
+          onClick={() => navigate('/auth')}
           className="text-lg px-8 py-6 text-white font-semibold shadow-2xl"
         >
           {t('getStarted')}
